@@ -24,7 +24,7 @@ Originally based on a function by Brendan O'Connor.
 }
 \examples{
 # show the fifth digit
-mnist <- parse_mnist()
+mnist <- download_mnist()
 show_digit(mnist, 5)
 }
 
