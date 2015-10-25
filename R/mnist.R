@@ -8,6 +8,7 @@
 #' @param n row index of the digit to display.
 #' @param col list of colors to use in the display.
 #' @param ... Other arguments passed onto the \code{image} function.
+#' @export
 #' @examples
 #' # show the fifth digit
 #' mnist <- parse_mnist()
@@ -37,9 +38,11 @@ show_digit <- function(df, n, col = gray(12:1/12), ...) {
 #'
 #' For more information see \url{http://yann.lecun.com/exdb/mnist}.
 #'
+#' @return a data frame.
 #' @note Originally based on a function by Brendan O'Connor.
+#' @export
 #' @examples
-#' # download the files and parse them
+#' # download the MNIST data set
 #' mnist <- parse_mnist()
 #'
 #' # first 60,000 instances are the training set
