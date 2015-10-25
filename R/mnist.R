@@ -1,0 +1,98 @@
+#' Visualize a digit from the MNIST dataset.
+#'
+#' Displays as an image the hand-written digit represented by the nth row in
+#' a data frame.
+#'
+#' @note Originally based on a function by Brendan O'Connor.
+#' @param df Data frame containing MNIST digits.
+#' @param n row index of the digit to display.
+#' @param col list of colors to use in the display.
+#' @param ... Other arguments passed onto the \code{image} function.
+#' @examples
+#' # show the fifth digit
+#' mnist <- parse_mnist()
+#' show_digit(mnist, 5)
+show_digit <- function(df, n, col = gray(12:1/12), ...) {
+    image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1], col = col, ...)
+}
+
+#' Download the MNIST database of handwritten digits.
+#'
+#' Downloads the image and label files for the training and test datasets from
+#' \url{http://yann.lecun.com/exdb/mnist} and converts them to a data frame.
+#'
+#' @format A data frame with 785 variables:
+#'
+#' \describe{
+#' \item{\code{px1}, \code{px2}, \code{px3} ... \code{px784}}{Integer pixel value, from 0 (white) to 255 (black).}
+#' \item{\code{Label}}{The digit represented by the image, in the range 0-9.}
+#' }
+#'
+#' Pixels are organized row-wise. The \code{Label} variable is stored as a
+#' factor.
+#'
+#' There are 70,000 digits in the data set. The first 60,000 are the training
+#' set, as found in the \code{train-images-idx3-ubyte.gz} file. The remaining
+#' 10,000 are the test set, from the \code{t10k-images-idx3-ubyte.gz} file.
+#'
+#' For more information see \url{http://yann.lecun.com/exdb/mnist}.
+#'
+#' @note Originally based on a function by Brendan O'Connor.
+#' @examples
+#' # download the files and parse them
+#' mnist <- parse_mnist()
+#'
+#' # first 60,000 instances are the training set
+#' mnist_train <- head(mnist, 60000)
+#' # the remaining 10,000 are the test set
+#' mnist_test <- tail(mnist, 10000)
+#'
+#' # PCA on 1000 random training examples
+#' mnist_r1000 <- mnist_train[sample(nrow(mnist_train), 1000), ]
+#' pca <- princomp(mnist_r1000[,1:784], scores = TRUE)
+#' # plot the scores of the first two components
+#' plot(pca$scores[,1:2], t='n')
+#' text(pca$scores[,1:2], labels = mnist_r1000$Label,
+#'      col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
+parse_mnist <- function() {
+    base_url <- "http://yann.lecun.com/exdb/mnist/"
+
+    parse_image_file <- function(x) {
+        f <- gzcon(url(paste0(base_url, x), "rb"))
+        magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+        if (magic != 2051) {
+          stop("First four bytes of image file should be magic number 2051 ",
+               "but was ", magic)
+        }
+        n <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+        nrow <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+        ncol <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+        x <- readBin(f, "integer", n = n * nrow * ncol, size = 1,
+                     signed = FALSE)
+        close(f)
+        matrix(x, ncol = nrow * ncol, byrow = TRUE)
+    }
+    parse_label_file <- function(x) {
+        f <- gzcon(url(paste0(base_url, x), "rb"))
+        magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+        if (magic != 2049) {
+          stop("First four bytes of label file should be magic number 2049 ",
+               "but was ", magic)
+        }
+        n <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+        y <- readBin(f, "integer", n = n, size = 1, signed = FALSE)
+        close(f)
+        y
+    }
+    parse_files <- function(image_file, label_file) {
+      df <- as.data.frame(parse_image_file(image_file))
+      names(df) <- paste0("px", 1:ncol(df))
+      df$Label <- factor(parse_label_file(label_file))
+      df
+    }
+    train <- parse_files("train-images-idx3-ubyte.gz",
+                         "train-labels-idx1-ubyte.gz")
+    test <- parse_files("t10k-images-idx3-ubyte.gz",
+                        "t10k-labels-idx1-ubyte.gz")
+    rbind(train, test)
+}
