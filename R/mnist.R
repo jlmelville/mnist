@@ -11,7 +11,7 @@
 #' @export
 #' @examples
 #' # show the fifth digit
-#' mnist <- parse_mnist()
+#' mnist <- download_mnist()
 #' show_digit(mnist, 5)
 show_digit <- function(df, n, col = gray(12:1/12), ...) {
     image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1], col = col, ...)
@@ -43,7 +43,7 @@ show_digit <- function(df, n, col = gray(12:1/12), ...) {
 #' @export
 #' @examples
 #' # download the MNIST data set
-#' mnist <- parse_mnist()
+#' mnist <- download_mnist()
 #'
 #' # first 60,000 instances are the training set
 #' mnist_train <- head(mnist, 60000)
@@ -57,7 +57,7 @@ show_digit <- function(df, n, col = gray(12:1/12), ...) {
 #' plot(pca$scores[,1:2], t='n')
 #' text(pca$scores[,1:2], labels = mnist_r1000$Label,
 #'      col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
-parse_mnist <- function() {
+download_mnist <- function() {
     base_url <- "http://yann.lecun.com/exdb/mnist/"
 
     parse_image_file <- function(x) {

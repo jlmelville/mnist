@@ -18,7 +18,7 @@ devtools::install_github("jlmelville/mnist")
 Using:
 ```R
 # fetch the data set from the MNIST website
-mnist <- parse_mnist()
+mnist <- download_mnist()
 
 # view the fifth digit
 show_digit(mnist, 5)
