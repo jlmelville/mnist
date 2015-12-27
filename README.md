@@ -1,6 +1,7 @@
 # mnist
 
-mnist is an R package to download the [MNIST database](http://yann.lecun.com/exdb/mnist/), based on 
+mnist is an R package to download the 
+[MNIST database](http://yann.lecun.com/exdb/mnist/), based on 
 [a gist by Brendan O'Connor](https://gist.github.com/brendano/39760).
 
 The entire dataset is returned as a single data frame. The first 60,000
@@ -11,7 +12,7 @@ values (integers in the range 0-255) are in columns with name `px1`, `px2`,
 
 Installing:
 ```R
-install.packages("devtools")
+# install.packages("devtools")
 devtools::install_github("jlmelville/mnist")
 ```
 
@@ -32,8 +33,8 @@ mnist_test <- tail(mnist, 10000)
 mnist_r1000 <- mnist_train[sample(nrow(mnist_train), 1000), ]
 pca <- princomp(mnist_r1000[,1:784], scores = TRUE)
 # plot the scores of the first two components
-plot(pca$scores[,1:2], t='n')
-text(pca$scores[,1:2], labels = mnist_r1000$Label, 
+plot(pca$scores[, 1:2], type = 'n')
+text(pca$scores[, 1:2], labels = mnist_r1000$Label, 
      col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
 
 # save data set to disk
@@ -41,7 +42,9 @@ save(mnist, file = "mnist.Rda")
 ```
 
 ## License
-This package is licensed under [the MIT License](http://opensource.org/licenses/MIT).
+This package is licensed under 
+[the MIT License](http://opensource.org/licenses/MIT).
 
 ## See Also
-[A similar project](https://github.com/xrobin/mnist) by [Xavier Robin](https://github.com/xrobin).
+[A similar project](https://github.com/xrobin/mnist) by 
+[Xavier Robin](https://github.com/xrobin).

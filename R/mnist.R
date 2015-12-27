@@ -1,23 +1,28 @@
-#' Visualize a digit from the MNIST dataset.
+#' Visualize MNIST digit.
 #'
-#' Displays as an image the hand-written digit represented by the nth row in
-#' a data frame.
+#' Display an MNIST digit as an image the hand-written digit represented by the
+#' nth row in a data frame.
 #'
 #' @note Originally based on a function by Brendan O'Connor.
 #' @param df Data frame containing MNIST digits.
-#' @param n row index of the digit to display.
-#' @param col list of colors to use in the display.
-#' @param ... Other arguments passed onto the \code{image} function.
-#' @export
+#' @param n Row index of the digit to display.
+#' @param col List of colors to use in the display.
+#' @param ... Other arguments passed onto the \code{\link[graphics]{image}}
+#' function.
 #' @examples
+#' \dontrun{
 #' # show the fifth digit
-#' mnist <- download_mnist()
+#' mnist <- download_mnist()s
 #' show_digit(mnist, 5)
-show_digit <- function(df, n, col = gray(12:1/12), ...) {
+#' }
+#' @export
+show_digit <- function(df, n, col = gray(12:1 / 12), ...) {
     image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1], col = col, ...)
 }
 
-#' Download the MNIST database of handwritten digits.
+#' Download MNIST.
+#'
+#' Download MNIST database of handwritten digits.
 #'
 #' Downloads the image and label files for the training and test datasets from
 #' \url{http://yann.lecun.com/exdb/mnist} and converts them to a data frame.
@@ -25,7 +30,8 @@ show_digit <- function(df, n, col = gray(12:1/12), ...) {
 #' @format A data frame with 785 variables:
 #'
 #' \describe{
-#' \item{\code{px1}, \code{px2}, \code{px3} ... \code{px784}}{Integer pixel value, from 0 (white) to 255 (black).}
+#' \item{\code{px1}, \code{px2}, \code{px3} ... \code{px784}}{Integer pixel
+#' value, from 0 (white) to 255 (black).}
 #' \item{\code{Label}}{The digit represented by the image, in the range 0-9.}
 #' }
 #'
@@ -38,11 +44,12 @@ show_digit <- function(df, n, col = gray(12:1/12), ...) {
 #'
 #' For more information see \url{http://yann.lecun.com/exdb/mnist}.
 #'
-#' @return a data frame.
+#' @return Data frame containing the MNIST digits.
 #' @note Originally based on a function by Brendan O'Connor.
 #' @export
 #' @examples
 #' # download the MNIST data set
+#' \dontrun{
 #' mnist <- download_mnist()
 #'
 #' # first 60,000 instances are the training set
@@ -52,11 +59,13 @@ show_digit <- function(df, n, col = gray(12:1/12), ...) {
 #'
 #' # PCA on 1000 random training examples
 #' mnist_r1000 <- mnist_train[sample(nrow(mnist_train), 1000), ]
-#' pca <- princomp(mnist_r1000[,1:784], scores = TRUE)
+#' pca <- princomp(mnist_r1000[, 1:784], scores = TRUE)
 #' # plot the scores of the first two components
-#' plot(pca$scores[,1:2], t='n')
-#' text(pca$scores[,1:2], labels = mnist_r1000$Label,
+#' plot(pca$scores[, 1:2], type = 'n')
+#' text(pca$scores[, 1:2], labels = mnist_r1000$Label,
 #'      col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
+#'}
+#' @export
 download_mnist <- function() {
     base_url <- "http://yann.lecun.com/exdb/mnist/"
 
