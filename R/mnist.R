@@ -17,10 +17,13 @@
 #' }
 #' @export
 show_digit <- function(df, n, col = gray(12:1 / 12), ...) {
-    image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1], col = col, ...)
+  image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1], col = col, ...)
 }
 
-#' Download MNIST.
+# Base URL of the the MNIST digits dataset website
+mnist_url <- "http://yann.lecun.com/exdb/mnist/"
+
+#' Download MNIST
 #'
 #' Download MNIST database of handwritten digits.
 #'
@@ -31,7 +34,7 @@ show_digit <- function(df, n, col = gray(12:1 / 12), ...) {
 #'
 #' \describe{
 #' \item{\code{px1}, \code{px2}, \code{px3} ... \code{px784}}{Integer pixel
-#' value, from 0 (white) to 255 (black).}
+#'   value, from 0 (white) to 255 (black).}
 #' \item{\code{Label}}{The digit represented by the image, in the range 0-9.}
 #' }
 #'
@@ -44,12 +47,14 @@ show_digit <- function(df, n, col = gray(12:1 / 12), ...) {
 #'
 #' For more information see \url{http://yann.lecun.com/exdb/mnist}.
 #'
+#' @param verbose If \code{TRUE}, then download progress will be logged as a
+#'   message.
 #' @return Data frame containing the MNIST digits.
 #' @note Originally based on a function by Brendan O'Connor.
 #' @export
 #' @examples
-#' # download the MNIST data set
 #' \dontrun{
+#' # download the MNIST data set
 #' mnist <- download_mnist()
 #'
 #' # first 60,000 instances are the training set
@@ -66,45 +71,100 @@ show_digit <- function(df, n, col = gray(12:1 / 12), ...) {
 #'      col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
 #'}
 #' @export
-download_mnist <- function() {
-    base_url <- "http://yann.lecun.com/exdb/mnist/"
-
-    parse_image_file <- function(x) {
-        f <- gzcon(url(paste0(base_url, x), "rb"))
-        magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
-        if (magic != 2051) {
-          stop("First four bytes of image file should be magic number 2051 ",
-               "but was ", magic)
-        }
-        n <- readBin(f, "integer", n = 1, size = 4, endian = "big")
-        nrow <- readBin(f, "integer", n = 1, size = 4, endian = "big")
-        ncol <- readBin(f, "integer", n = 1, size = 4, endian = "big")
-        x <- readBin(f, "integer", n = n * nrow * ncol, size = 1,
-                     signed = FALSE)
-        close(f)
-        matrix(x, ncol = nrow * ncol, byrow = TRUE)
-    }
-    parse_label_file <- function(x) {
-        f <- gzcon(url(paste0(base_url, x), "rb"))
-        magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
-        if (magic != 2049) {
-          stop("First four bytes of label file should be magic number 2049 ",
-               "but was ", magic)
-        }
-        n <- readBin(f, "integer", n = 1, size = 4, endian = "big")
-        y <- readBin(f, "integer", n = n, size = 1, signed = FALSE)
-        close(f)
-        y
-    }
-    parse_files <- function(image_file, label_file) {
-      df <- as.data.frame(parse_image_file(image_file))
-      names(df) <- paste0("px", 1:ncol(df))
-      df$Label <- factor(parse_label_file(label_file))
-      df
-    }
-    train <- parse_files("train-images-idx3-ubyte.gz",
-                         "train-labels-idx1-ubyte.gz")
-    test <- parse_files("t10k-images-idx3-ubyte.gz",
-                        "t10k-labels-idx1-ubyte.gz")
-    rbind(train, test)
+download_mnist <- function(base_url = mnist_url, verbose = FALSE) {
+  train <- parse_files("train-images-idx3-ubyte.gz",
+                       "train-labels-idx1-ubyte.gz",
+                       base_url = base_url, verbose = verbose)
+  test <- parse_files("t10k-images-idx3-ubyte.gz",
+                      "t10k-labels-idx1-ubyte.gz",
+                      base_url = base_url, verbose = verbose)
+  rbind(train, test)
 }
+
+#' Open Gzipped Binary File at URL
+#'
+#' Opens a file at a specified URL and returns the connection for further
+#' processing. Callers must close the connection when they're done.
+#'
+#' @param filename Name of the file to open.
+#' @param base_url URL of the resource containing the file.
+#' @param verbose If \code{TRUE}, generate a diagnostic message when the file
+#' is opened.
+#' @return Opened connection to the file.
+open_binary_file <- function(filename, base_url = mnist_url, verbose = FALSE) {
+  conn <- paste0(base_url, filename)
+  if (verbose) {
+    message("Downloading ", conn)
+  }
+  gzcon(url(conn, "rb"))
+}
+
+#' Parse Image File
+#'
+#' Downloads a gzipped MNIST image file.
+#'
+#' @param filename The image filename.
+#' @param base_url URL of the resource containing the \code{filename}.
+#' @param verbose If \code{TRUE}, generate a diagnostic message as files are
+#' downloaded.
+#' @return Vector of integers representing the digits.
+parse_image_file <- function(filename, base_url = mnist_url,
+                             verbose = verbose) {
+  f <- open_binary_file(filename, base_url = base_url, verbose = verbose)
+  magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+  if (magic != 2051) {
+    stop("First four bytes of image file should be magic number 2051 but was ",
+         magic)
+  }
+  n <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+  nrow <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+  ncol <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+  x <- readBin(f, "integer", n = n * nrow * ncol, size = 1, signed = FALSE)
+  close(f)
+  matrix(x, ncol = nrow * ncol, byrow = TRUE)
+}
+
+#' Parse Label File
+#'
+#' Downloads a gzipped MNIST label file.
+#'
+#' @param filename The label filename.
+#' @param base_url URL of the resource containing \code{filename}.
+#' @param verbose If \code{TRUE}, generate a diagnostic message as files are
+#' downloaded.
+#' @return Vector of integers representing the digits.
+parse_label_file <- function(filename, base_url = mnist_url, verbose = FALSE) {
+  f <- open_binary_file(filename, base_url = base_url, verbose = verbose)
+  magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+  if (magic != 2049) {
+    stop("First four bytes of label file should be magic number 2049 but was ",
+         magic)
+  }
+  n <- readBin(f, "integer", n = 1, size = 4, endian = "big")
+  y <- readBin(f, "integer", n = n, size = 1, signed = FALSE)
+  close(f)
+  y
+}
+
+#' Parse Image and Label File Pair
+#'
+#' Downloads an image file and a corresponding label file, combining
+#' them into a data frame.
+#'
+#' @param image_filename The image filename.
+#' @param label_filename The label filename corresponding to the images in
+#'   \code{image_filename}.
+#' @param base_url URL of the resource containing the files.
+#' @param verbose If \code{TRUE}, generate a diagnostic message as files are
+#'   downloaded.
+#' @return Data frame containing images and labels.
+parse_files <- function(image_filename, label_filename, base_url = mnist_url,
+                        verbose = FALSE) {
+  df <- as.data.frame(parse_image_file(image_filename, base_url = base_url,
+                                       verbose = verbose))
+  names(df) <- paste0("px", 1:ncol(df))
+  df$Label <- factor(parse_label_file(label_filename, base_url = base_url,
+                                      verbose = verbose))
+  df
+}
+

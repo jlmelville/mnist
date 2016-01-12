@@ -2,7 +2,7 @@
 % Please edit documentation in R/mnist.R
 \name{download_mnist}
 \alias{download_mnist}
-\title{Download MNIST.}
+\title{Download MNIST}
 \format{A data frame with 785 variables:
 
 \describe{
@@ -20,7 +20,11 @@ set, as found in the \code{train-images-idx3-ubyte.gz} file. The remaining
 
 For more information see \url{http://yann.lecun.com/exdb/mnist}.}
 \usage{
-download_mnist()
+download_mnist(base_url = mnist_url, verbose = FALSE)
+}
+\arguments{
+\item{verbose}{If \code{TRUE}, then download progress will be logged as a
+message.}
 }
 \value{
 Data frame containing the MNIST digits.
@@ -36,8 +40,8 @@ Downloads the image and label files for the training and test datasets from
 Originally based on a function by Brendan O'Connor.
 }
 \examples{
-# download the MNIST data set
 \dontrun{
+# download the MNIST data set
 mnist <- download_mnist()
 
 # first 60,000 instances are the training set

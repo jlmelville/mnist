@@ -1,7 +1,7 @@
 Package: mnist
 Type: Package
 Title: Code to Download the MNIST Database of Handwritten Digits
-Version: 0.2
+Version: 0.3
 Date: 2015-10-24
 Authors@R: person("Melville", "James", email = "jlmelville@gmail.com",
     role = c("aut", "cre"))
