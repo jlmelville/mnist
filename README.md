@@ -14,6 +14,7 @@ Installing:
 ```R
 # install.packages("devtools")
 devtools::install_github("jlmelville/mnist")
+library(mnist)
 ```
 
 Using:
@@ -31,11 +32,12 @@ mnist_test <- tail(mnist, 10000)
 
 # PCA on 1000 random training examples
 mnist_r1000 <- mnist_train[sample(nrow(mnist_train), 1000), ]
-pca <- princomp(mnist_r1000[,1:784], scores = TRUE)
+
+pca <- prcomp(mnist_r1000[, 1:784], retx = TRUE)
 # plot the scores of the first two components
-plot(pca$scores[, 1:2], type = 'n')
-text(pca$scores[, 1:2], labels = mnist_r1000$Label, 
-     col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
+plot(pca$x[, 1:2], type = 'n')
+text(pca$x[, 1:2], labels = mnist_r1000$Label, cex = 0.5,
+  col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
 
 # save data set to disk
 save(mnist, file = "mnist.Rda")
