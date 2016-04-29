@@ -12,7 +12,7 @@
 #' @examples
 #' \dontrun{
 #' # show the fifth digit
-#' mnist <- download_mnist()s
+#' mnist <- download_mnist()
 #' show_digit(mnist, 5)
 #' }
 #' @export
