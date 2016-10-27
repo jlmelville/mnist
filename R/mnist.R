@@ -16,8 +16,9 @@
 #' show_digit(mnist, 5)
 #' }
 #' @export
-show_digit <- function(df, n, col = gray(12:1 / 12), ...) {
-  image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1], col = col, ...)
+show_digit <- function(df, n, col = grDevices::gray(12:1 / 12), ...) {
+  graphics::image(matrix(as.numeric(df[n, 1:784]), nrow = 28)[, 28:1],
+                  col = col, ...)
 }
 
 # Base URL of the the MNIST digits dataset website
