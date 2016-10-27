@@ -47,6 +47,7 @@ mnist_url <- "http://yann.lecun.com/exdb/mnist/"
 #'
 #' For more information see \url{http://yann.lecun.com/exdb/mnist}.
 #'
+#' @param base_url Base URL that the MNIST files are located at.
 #' @param verbose If \code{TRUE}, then download progress will be logged as a
 #'   message.
 #' @return Data frame containing the MNIST digits.

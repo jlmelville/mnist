@@ -23,6 +23,8 @@ For more information see \url{http://yann.lecun.com/exdb/mnist}.}
 download_mnist(base_url = mnist_url, verbose = FALSE)
 }
 \arguments{
+\item{base_url}{Base URL that the MNIST files are located at.}
+
 \item{verbose}{If \code{TRUE}, then download progress will be logged as a
 message.}
 }
