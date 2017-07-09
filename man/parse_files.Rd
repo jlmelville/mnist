@@ -25,4 +25,3 @@ Data frame containing images and labels.
 Downloads an image file and a corresponding label file, combining
 them into a data frame.
 }
-

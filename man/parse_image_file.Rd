@@ -20,4 +20,3 @@ Vector of integers representing the digits.
 \description{
 Downloads a gzipped MNIST image file.
 }
-

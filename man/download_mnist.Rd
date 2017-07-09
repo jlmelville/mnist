@@ -60,4 +60,3 @@ text(pca$scores[, 1:2], labels = mnist_r1000$Label,
      col = rainbow(length(levels(mnist_r1000$Label)))[mnist_r1000$Label])
 }
 }
-

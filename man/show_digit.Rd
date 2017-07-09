@@ -30,4 +30,3 @@ mnist <- download_mnist()
 show_digit(mnist, 5)
 }
 }
-

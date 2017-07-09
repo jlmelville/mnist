@@ -12,4 +12,4 @@ Description: Code to download and display the MNIST database of handwritten
 License: MIT + file LICENSE
 URL: https://github.com/jlmelville/mnist
 BugReports: https://github.com/jlmelville/mnist/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

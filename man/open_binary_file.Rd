@@ -21,4 +21,3 @@ Opened connection to the file.
 Opens a file at a specified URL and returns the connection for further
 processing. Callers must close the connection when they're done.
 }
-
