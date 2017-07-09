@@ -3,7 +3,7 @@ Type: Package
 Title: Code to Download the MNIST Database of Handwritten Digits
 Version: 0.4
 Date: 2015-10-24
-Authors@R: person("Melville", "James", email = "jlmelville@gmail.com",
+Authors@R: person("James", "Melville", email = "jlmelville@gmail.com",
     role = c("aut", "cre"))
 Description: Code to download and display the MNIST database of handwritten
     digits, used in many machine learning papers. The dataset has already been split
