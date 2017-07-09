@@ -83,16 +83,16 @@ download_mnist <- function(base_url = mnist_url, verbose = FALSE) {
   rbind(train, test)
 }
 
-#' Open Gzipped Binary File at URL
-#'
-#' Opens a file at a specified URL and returns the connection for further
-#' processing. Callers must close the connection when they're done.
-#'
-#' @param filename Name of the file to open.
-#' @param base_url URL of the resource containing the file.
-#' @param verbose If \code{TRUE}, generate a diagnostic message when the file
-#' is opened.
-#' @return Opened connection to the file.
+# Open Gzipped Binary File at URL
+#
+# Opens a file at a specified URL and returns the connection for further
+# processing. Callers must close the connection when they're done.
+#
+# @param filename Name of the file to open.
+# @param base_url URL of the resource containing the file.
+# @param verbose If \code{TRUE}, generate a diagnostic message when the file
+# is opened.
+# @return Opened connection to the file.
 open_binary_file <- function(filename, base_url = mnist_url, verbose = FALSE) {
   conn <- paste0(base_url, filename)
   if (verbose) {
@@ -101,15 +101,15 @@ open_binary_file <- function(filename, base_url = mnist_url, verbose = FALSE) {
   gzcon(url(conn, "rb"))
 }
 
-#' Parse Image File
-#'
-#' Downloads a gzipped MNIST image file.
-#'
-#' @param filename The image filename.
-#' @param base_url URL of the resource containing the \code{filename}.
-#' @param verbose If \code{TRUE}, generate a diagnostic message as files are
-#' downloaded.
-#' @return Vector of integers representing the digits.
+# Parse Image File
+#
+# Downloads a gzipped MNIST image file.
+#
+# @param filename The image filename.
+# @param base_url URL of the resource containing the \code{filename}.
+# @param verbose If \code{TRUE}, generate a diagnostic message as files are
+# downloaded.
+# @return Vector of integers representing the digits.
 parse_image_file <- function(filename, base_url = mnist_url,
                              verbose = verbose) {
   f <- open_binary_file(filename, base_url = base_url, verbose = verbose)
@@ -126,15 +126,15 @@ parse_image_file <- function(filename, base_url = mnist_url,
   matrix(x, ncol = nrow * ncol, byrow = TRUE)
 }
 
-#' Parse Label File
-#'
-#' Downloads a gzipped MNIST label file.
-#'
-#' @param filename The label filename.
-#' @param base_url URL of the resource containing \code{filename}.
-#' @param verbose If \code{TRUE}, generate a diagnostic message as files are
-#' downloaded.
-#' @return Vector of integers representing the digits.
+# Parse Label File
+#
+# Downloads a gzipped MNIST label file.
+#
+# @param filename The label filename.
+# @param base_url URL of the resource containing \code{filename}.
+# @param verbose If \code{TRUE}, generate a diagnostic message as files are
+# downloaded.
+# @return Vector of integers representing the digits.
 parse_label_file <- function(filename, base_url = mnist_url, verbose = FALSE) {
   f <- open_binary_file(filename, base_url = base_url, verbose = verbose)
   magic <- readBin(f, "integer", n = 1, size = 4, endian = "big")
@@ -148,18 +148,18 @@ parse_label_file <- function(filename, base_url = mnist_url, verbose = FALSE) {
   y
 }
 
-#' Parse Image and Label File Pair
-#'
-#' Downloads an image file and a corresponding label file, combining
-#' them into a data frame.
-#'
-#' @param image_filename The image filename.
-#' @param label_filename The label filename corresponding to the images in
-#'   \code{image_filename}.
-#' @param base_url URL of the resource containing the files.
-#' @param verbose If \code{TRUE}, generate a diagnostic message as files are
-#'   downloaded.
-#' @return Data frame containing images and labels.
+# Parse Image and Label File Pair
+#
+# Downloads an image file and a corresponding label file, combining
+# them into a data frame.
+#
+# @param image_filename The image filename.
+# @param label_filename The label filename corresponding to the images in
+#   \code{image_filename}.
+# @param base_url URL of the resource containing the files.
+# @param verbose If \code{TRUE}, generate a diagnostic message as files are
+#   downloaded.
+# @return Data frame containing images and labels.
 parse_files <- function(image_filename, label_filename, base_url = mnist_url,
                         verbose = FALSE) {
   df <- as.data.frame(parse_image_file(image_filename, base_url = base_url,
