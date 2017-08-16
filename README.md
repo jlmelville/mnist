@@ -1,5 +1,8 @@
 # mnist
 
+**NOTE: This package has been superseded by [snedata](https://github.com/jlmelville/snedata).** 
+See you over there.
+
 mnist is an R package to download the 
 [MNIST database](http://yann.lecun.com/exdb/mnist/), based on 
 [a gist by Brendan O'Connor](https://gist.github.com/brendano/39760).
@@ -10,14 +13,16 @@ values (integers in the range 0-255) are in columns with name `px1`, `px2`,
 `px3` etc. The label representing the numerical value of the digit is in the
 `Label` column (which is stored as a factor).
 
-Installing:
+## Installing:
+
 ```R
 # install.packages("devtools")
 devtools::install_github("jlmelville/mnist")
 library(mnist)
 ```
 
-Using:
+## Using:
+
 ```R
 # fetch the data set from the MNIST website
 mnist <- download_mnist()
@@ -44,6 +49,7 @@ save(mnist, file = "mnist.Rda")
 ```
 
 ## License
+
 This package is licensed under 
 [the MIT License](http://opensource.org/licenses/MIT).
 
