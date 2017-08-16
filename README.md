@@ -54,11 +54,7 @@ This package is licensed under
 [the MIT License](http://opensource.org/licenses/MIT).
 
 ## See Also
-[A similar project](https://github.com/xrobin/mnist) by 
-[Xavier Robin](https://github.com/xrobin).
 
-I have similar R packages for the 
-[Simulation, Olivetti and Frey Faces](https://github.com/jlmelville/snedata) and
-[COIL-20](https://github.com/jlmelville/coil20) datasets.
-For doing an embedding, you could give 
-[sneer](https://github.com/jlmelville/sneer) a go.
+* [A similar project](https://github.com/xrobin/mnist) by [Xavier Robin](https://github.com/xrobin).
+* I have similar R packages for [simulation, Olivetti and Frey Faces](https://github.com/jlmelville/snedata) and [COIL-20](https://github.com/jlmelville/coil20) datasets.
+* For doing an embedding, you could give [sneer](https://github.com/jlmelville/sneer) a go.
